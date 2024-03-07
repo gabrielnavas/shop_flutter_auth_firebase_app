@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:shop_flutter_app/exceptions/http_exception.dart';
 import 'package:shop_flutter_app/models/cart.dart';
 import 'package:shop_flutter_app/models/product.dart';
-import 'package:shop_flutter_app/providers/auth.dart';
 import 'package:shop_flutter_app/providers/product_list.dart';
 import 'package:shop_flutter_app/routes.dart';
 
@@ -17,7 +16,6 @@ class ProductGridItem extends StatelessWidget {
     // not change UI (performatic)
     final Product product = Provider.of<Product>(context);
     final Cart cart = Provider.of<Cart>(context);
-    final Auth auth = Provider.of<Auth>(context);
 
     // grid with rows and columns
     Widget gridTileProduct = GridTile(
