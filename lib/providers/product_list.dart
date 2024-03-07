@@ -52,7 +52,7 @@ class ProductList with ChangeNotifier {
   }
 
   Future<bool> loadProducts() async {
-    _items.clear();
+    List<Product> items = [];
 
     try {
       final resp = await http.get(
@@ -67,7 +67,7 @@ class ProductList with ChangeNotifier {
       }
 
       body.forEach((productId, productData) {
-        _items.add(
+        items.add(
           Product(
             id: productId,
             name: productData['name'] as String,
@@ -78,6 +78,8 @@ class ProductList with ChangeNotifier {
           ),
         );
       });
+
+      _items = items.reversed.toList();
       return true;
     } catch (ex) {
       return false;
