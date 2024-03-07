@@ -25,6 +25,9 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
+          create: (_) => Auth(),
+        ),
+        ChangeNotifierProvider(
           create: (_) => ProductList(),
         ),
         ChangeNotifierProvider(
@@ -32,9 +35,6 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => OrderList(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => Auth(),
         ),
       ],
       child: MaterialApp(
