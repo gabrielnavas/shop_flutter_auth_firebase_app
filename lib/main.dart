@@ -28,15 +28,7 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
           fontFamily: 'Lato',
         ),
-        routes: {
-          // Routes.auth: (_) => const AuthPage(),
-          Routes.home: (_) => const AuthOrPage(ProductsOverviewPage()),
-          Routes.productDetail: (_) => const AuthOrPage(ProductDetailPage()),
-          Routes.cart: (_) => const AuthOrPage(CartPage()),
-          Routes.order: (_) => const AuthOrPage(OrderPage()),
-          Routes.products: (_) => const AuthOrPage(ProductsManager()),
-          Routes.productForm: (_) => const AuthOrPage(ProductFormPage()),
-        },
+        routes: Routes.getRoutes(),
       ),
     );
   }
