@@ -7,12 +7,14 @@ import 'package:shop_flutter_app/exceptions/http_exception.dart';
 import 'package:shop_flutter_app/models/product.dart';
 
 class ProductList with ChangeNotifier {
-  final String _url = "$api/products";
+  final String _urlProduct = "$api/products";
+  final String _urlUserProductFavorites = "$api/userProductFavorites";
   final String _token;
+  final String _userId;
 
   List<Product> _items = [];
 
-  ProductList(this._token, this._items);
+  ProductList([this._token = '', this._userId = '', this._items = const []]);
 
   List<Product> get items => [..._items];
   List<Product> get favoriteItems =>
@@ -28,12 +30,12 @@ class ProductList with ChangeNotifier {
     try {
       final resp = await http.post(
         Uri.parse(
-          '$_url.json?auth=$_token',
+          '$_urlProduct.json?auth=$_token',
         ),
         body: jsonEncode({
           "name": product.name,
           "description": product.description,
-          "isFavorite": product.isFavorite,
+          // "isFavorite": product.isFavorite,
           "price": product.price,
           "imageUrl": product.imageUrl,
         }),
@@ -55,18 +57,21 @@ class ProductList with ChangeNotifier {
     List<Product> items = [];
 
     try {
-      final resp = await http.get(
+      final respProducts = await http.get(
         Uri.parse(
-          '$_url.json?auth=$_token',
+          '$_urlProduct.json?auth=$_token',
         ),
       );
-      final dynamic body = jsonDecode(resp.body);
-      if (body == null) {
+      final dynamic bodyProducts = jsonDecode(respProducts.body);
+      if (bodyProducts == null) {
         // when the products is empty, firebase returns null on body
         return true;
       }
 
-      body.forEach((productId, productData) {
+      Map<String, dynamic> productIsFavorite = await _getIsfavorites();
+
+      bodyProducts.forEach((productId, productData) {
+        final bool isFavorite = productIsFavorite[productId] ?? false;
         items.add(
           Product(
             id: productId,
@@ -74,7 +79,7 @@ class ProductList with ChangeNotifier {
             description: productData['description'] as String,
             price: productData['price'] as double,
             imageUrl: productData['imageUrl'] as String,
-            isFavorite: productData['isFavorite'] as bool,
+            isFavorite: isFavorite,
           ),
         );
       });
@@ -84,6 +89,22 @@ class ProductList with ChangeNotifier {
     } catch (ex) {
       return false;
     }
+  }
+
+  Future<Map<String, dynamic>> _getIsfavorites() async {
+    final respIsFavorite = await http.get(
+      Uri.parse(
+        '$_urlUserProductFavorites/$_userId.json?auth=$_token',
+      ),
+    );
+
+    dynamic isFavoriteBody = jsonDecode(respIsFavorite.body);
+    if (isFavoriteBody == null) {
+      // when the products is empty, firebase returns null on body
+      throw HttpException(message: 'Ocorreu um problema', status: 500);
+    }
+
+    return isFavoriteBody != null ? isFavoriteBody as Map<String, dynamic> : {};
   }
 
   void _toggleFavorite(int index) {
@@ -103,13 +124,11 @@ class ProductList with ChangeNotifier {
       if (index >= 0) {
         _toggleFavorite(index);
 
-        final resp = await http.patch(
+        final resp = await http.put(
           Uri.parse(
-            '$_url/$productId.json?auth=$_token',
+            '$_urlUserProductFavorites/$_userId/$productId.json?auth=$_token',
           ),
-          body: jsonEncode({
-            "isFavorite": _items[index].isFavorite,
-          }),
+          body: jsonEncode(_items[index].isFavorite),
         );
         if (resp.statusCode >= 400) {
           _toggleFavorite(index);
@@ -130,7 +149,7 @@ class ProductList with ChangeNotifier {
     if (index >= 0) {
       await http.patch(
         Uri.parse(
-          '$_url/${product.id}.json?auth=$_token',
+          '$_urlProduct/${product.id}.json?auth=$_token',
         ),
         body: jsonEncode({
           "name": product.name,
@@ -160,7 +179,7 @@ class ProductList with ChangeNotifier {
 
       final resp = await http.delete(
         Uri.parse(
-          '$_url/${product.id}.json?auth=$_token',
+          '$_urlProduct/${product.id}.json?auth=$_token',
         ),
         body: jsonEncode({
           "name": product.name,

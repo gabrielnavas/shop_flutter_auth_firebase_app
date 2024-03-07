@@ -15,7 +15,7 @@ class OrderList with ChangeNotifier {
 
   List<Order> _items = [];
 
-  OrderList(this._token, this._items);
+  OrderList([this._token = '', this._items = const []]);
 
   List<Order> get items => [..._items];
 

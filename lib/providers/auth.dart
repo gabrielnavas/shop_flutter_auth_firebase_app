@@ -29,13 +29,13 @@ class ErrorMap {
 class AuthData {
   final String email;
   final String token;
-  final String uid;
+  final String userId;
   final DateTime expiryDate;
 
   const AuthData({
     required this.email,
     required this.token,
-    required this.uid,
+    required this.userId,
     required this.expiryDate,
   });
 }
@@ -153,7 +153,7 @@ class Auth with ChangeNotifier {
     authData = AuthData(
       email: body["email"] as String,
       token: body["idToken"] as String,
-      uid: body["localId"] as String,
+      userId: body["localId"] as String,
       expiryDate: expiryDateWithAdd,
     );
   }

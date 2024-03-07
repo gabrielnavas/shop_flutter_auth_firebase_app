@@ -12,10 +12,11 @@ class Providers {
         create: (_) => Auth(),
       ),
       ChangeNotifierProxyProvider<Auth, ProductList>(
-          create: (_) => ProductList('', []),
+          create: (_) => ProductList(),
           update: (context, auth, previousProductList) {
             return ProductList(
               auth.authData?.token ?? '',
+              auth.authData?.userId ?? '',
               previousProductList?.items ??
                   [], // if token is updated, get previous list
             );
@@ -24,7 +25,7 @@ class Providers {
         create: (_) => Cart(),
       ),
       ChangeNotifierProxyProvider<Auth, OrderList>(
-          create: (_) => OrderList('', []),
+          create: (_) => OrderList(),
           update: (context, auth, previousOrderList) {
             return OrderList(
               auth.authData?.token ?? '',
