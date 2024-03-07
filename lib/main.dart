@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shop_flutter_app/models/cart.dart';
 import 'package:shop_flutter_app/pages/auth/auth_or_page.dart';
 import 'package:shop_flutter_app/pages/product/products_manager_page.dart';
 import 'package:shop_flutter_app/pages/product/products_overview_page.dart';
-import 'package:shop_flutter_app/providers/auth.dart';
-import 'package:shop_flutter_app/providers/order_list.dart';
-import 'package:shop_flutter_app/providers/product_list.dart';
+import 'package:shop_flutter_app/providers.dart';
 import 'package:shop_flutter_app/pages/cart/cart_page.dart';
 import 'package:shop_flutter_app/pages/order/order_page.dart';
 import 'package:shop_flutter_app/pages/product/product_detail_page.dart';
@@ -23,25 +20,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(
-          create: (_) => Auth(),
-        ),
-        ChangeNotifierProxyProvider<Auth, ProductList>(
-            create: (_) => ProductList('', []),
-            update: (context, auth, previousProductList) {
-              return ProductList(
-                auth.authData?.token ?? '',
-                previousProductList?.items ?? [],
-              );
-            }),
-        ChangeNotifierProvider(
-          create: (_) => Cart(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => OrderList(),
-        ),
-      ],
+      providers: Providers.getProviders(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'shop app flutter',

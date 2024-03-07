@@ -11,8 +11,11 @@ import 'package:http/http.dart' as http;
 
 class OrderList with ChangeNotifier {
   final String _url = "$api/orders";
+  final String _token;
 
   final List<Order> _items = [];
+
+  OrderList(this._token);
 
   List<Order> get items => [..._items];
 
@@ -34,7 +37,7 @@ class OrderList with ChangeNotifier {
     try {
       final resp = await http.post(
         Uri.parse(
-          '$_url.json',
+          '$_url.json?auth=$_token',
         ),
         body: orderJson,
       );
@@ -70,7 +73,7 @@ class OrderList with ChangeNotifier {
     try {
       final resp = await http.get(
         Uri.parse(
-          '$_url.json',
+          '$_url.json?auth=$_token',
         ),
       );
       if (resp.statusCode >= 400) {
