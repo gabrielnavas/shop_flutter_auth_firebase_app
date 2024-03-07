@@ -28,7 +28,7 @@ class ProductList with ChangeNotifier {
     try {
       final resp = await http.post(
         Uri.parse(
-          '$_url.json',
+          '$_url.json?auth=$_token',
         ),
         body: jsonEncode({
           "name": product.name,
@@ -103,7 +103,7 @@ class ProductList with ChangeNotifier {
 
         final resp = await http.patch(
           Uri.parse(
-            '$_url/$productId.json',
+            '$_url/$productId.json?auth=$_token',
           ),
           body: jsonEncode({
             "isFavorite": _items[index].isFavorite,
@@ -128,7 +128,7 @@ class ProductList with ChangeNotifier {
     if (index >= 0) {
       await http.patch(
         Uri.parse(
-          '$_url/${product.id}.json',
+          '$_url/${product.id}.json?auth=$_token',
         ),
         body: jsonEncode({
           "name": product.name,
@@ -158,7 +158,7 @@ class ProductList with ChangeNotifier {
 
       final resp = await http.delete(
         Uri.parse(
-          '$_url/${product.id}.json',
+          '$_url/${product.id}.json?auth=$_token',
         ),
         body: jsonEncode({
           "name": product.name,
