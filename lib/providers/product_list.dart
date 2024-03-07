@@ -92,16 +92,24 @@ class ProductList with ChangeNotifier {
   }
 
   Future<Map<String, dynamic>> _getIsfavorites() async {
-    final respIsFavorite = await http.get(
+    final resp = await http.get(
       Uri.parse(
         '$_urlUserProductFavorites/$_userId.json?auth=$_token',
       ),
     );
 
-    dynamic isFavoriteBody = jsonDecode(respIsFavorite.body);
+    if (resp.statusCode >= 400) {
+      throw HttpException(
+        message:
+            'Não foi possível realizar essa operação. Tente novamente mais tarde',
+        status: 400,
+      );
+    }
+
+    dynamic isFavoriteBody = jsonDecode(resp.body);
     if (isFavoriteBody == null) {
       // when the products is empty, firebase returns null on body
-      throw HttpException(message: 'Ocorreu um problema', status: 500);
+      return {};
     }
 
     return isFavoriteBody != null ? isFavoriteBody as Map<String, dynamic> : {};
