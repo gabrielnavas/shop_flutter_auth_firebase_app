@@ -16,17 +16,20 @@ class Providers {
           update: (context, auth, previousProductList) {
             return ProductList(
               auth.authData?.token ?? '',
-              previousProductList?.items ?? [],
+              previousProductList?.items ??
+                  [], // if token is updated, get previous list
             );
           }),
       ChangeNotifierProvider(
         create: (_) => Cart(),
       ),
       ChangeNotifierProxyProvider<Auth, OrderList>(
-          create: (_) => OrderList(''),
+          create: (_) => OrderList('', []),
           update: (context, auth, previousOrderList) {
             return OrderList(
               auth.authData?.token ?? '',
+              previousOrderList?.items ??
+                  [], // if token is updated, get previous list
             );
           }),
     ];

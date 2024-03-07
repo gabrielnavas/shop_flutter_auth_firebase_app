@@ -13,9 +13,9 @@ class OrderList with ChangeNotifier {
   final String _url = "$api/orders";
   final String _token;
 
-  final List<Order> _items = [];
+  List<Order> _items = [];
 
-  OrderList(this._token);
+  OrderList(this._token, this._items);
 
   List<Order> get items => [..._items];
 
