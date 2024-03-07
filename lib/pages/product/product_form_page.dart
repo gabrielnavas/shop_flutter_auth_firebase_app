@@ -196,10 +196,15 @@ class _ProductFormPageState extends State<ProductFormPage> {
         actions: [
           IconButton(
             onPressed: () => _submitForm(product),
-            icon: const Icon(
-              Icons.save,
-              color: Color.fromARGB(255, 255, 255, 255),
-            ),
+            icon: _isLoading
+                ? const CircularProgressIndicator(
+                    color: Colors.white,
+                    strokeWidth: BorderSide.strokeAlignOutside,
+                  )
+                : const Icon(
+                    Icons.save,
+                    color: Color.fromARGB(255, 255, 255, 255),
+                  ),
           )
         ],
       ),
