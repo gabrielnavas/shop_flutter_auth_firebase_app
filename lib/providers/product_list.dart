@@ -8,8 +8,11 @@ import 'package:shop_flutter_app/models/product.dart';
 
 class ProductList with ChangeNotifier {
   final String _url = "$api/products";
+  final String _token;
 
-  final List<Product> _items = [];
+  List<Product> _items = [];
+
+  ProductList(this._token, this._items);
 
   List<Product> get items => [..._items];
   List<Product> get favoriteItems =>
@@ -54,7 +57,7 @@ class ProductList with ChangeNotifier {
     try {
       final resp = await http.get(
         Uri.parse(
-          '$_url.json',
+          '$_url.json?auth=$_token',
         ),
       );
       final dynamic body = jsonDecode(resp.body);

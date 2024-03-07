@@ -47,14 +47,14 @@ class Auth with ChangeNotifier {
   final String _urlSignin =
       "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=$keyWeb";
 
-  AuthData? _authData;
+  AuthData? authData;
 
   bool isAuth() {
-    if (_authData == null) {
+    if (authData == null) {
       return false;
     }
 
-    return _authData!.expiryDate.isAfter(DateTime.now());
+    return authData!.expiryDate.isAfter(DateTime.now());
   }
 
   Future<void> autenticate(String email, String password) async {
@@ -150,7 +150,7 @@ class Auth with ChangeNotifier {
     // now + 3600
     DateTime expiryDateWithAdd = now.add(durationExpiration);
 
-    _authData = AuthData(
+    authData = AuthData(
       email: body["email"] as String,
       token: body["idToken"] as String,
       uid: body["localId"] as String,
