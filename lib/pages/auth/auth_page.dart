@@ -15,8 +15,8 @@ class AuthPage extends StatelessWidget {
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  Color.fromRGBO(215, 117, 255, 0.5),
-                  Color.fromRGBO(255, 188, 117, 0.9),
+                  Color.fromRGBO(63, 185, 212, 0.498),
+                  Color.fromRGBO(208, 139, 65, 0.898),
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
@@ -47,7 +47,7 @@ class AuthPage extends StatelessWidget {
                     ],
                   ),
                   child: const Text(
-                    'Minha loja',
+                    'Shop Time',
                     style: TextStyle(
                       fontSize: 45,
                       fontFamily: 'Anton',
