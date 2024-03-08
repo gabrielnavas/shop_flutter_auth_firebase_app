@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_flutter_app/components/app_drawer.dart';
 import 'package:shop_flutter_app/components/center_message.dart';
-import 'package:shop_flutter_app/components/circular_progress_message.dart';
 import 'package:shop_flutter_app/components/product_grid.dart';
 import 'package:shop_flutter_app/models/cart.dart';
 import 'package:shop_flutter_app/providers/product_list.dart';
@@ -56,21 +55,21 @@ class _ProductsOverviewPageState extends State<ProductsOverviewPage> {
   Widget build(BuildContext context) {
     final productProvider = Provider.of<ProductList>(context);
 
-    Widget body = Center(
-      child: CircularProgressMessage(
-          'Carregando os produtos, aguarde.', () => _loadProducts(context)),
+    Widget body = const Center(
+      child: CircularProgressIndicator(),
     );
 
     if (productProvider.itemsCount == 0) {
-      body =
-          CenterMessage('Nenhum produto listado', () => _loadProducts(context));
-    } else if (!_isLoading) {
+      body = CenterMessage(
+        'Nenhum produto listado.',
+        () async => _loadProducts(context),
+      );
+    }
+    if (!_isLoading) {
       body = RefreshIndicator(
         onRefresh: () async => _loadProducts(context),
         child: ProductGrid(
-          products: _showFavoriteOnly
-              ? productProvider.favoriteItems
-              : productProvider.items,
+          products: productProvider.items,
         ),
       );
     }

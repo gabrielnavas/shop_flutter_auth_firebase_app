@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_flutter_app/components/app_drawer.dart';
 import 'package:shop_flutter_app/components/center_message.dart';
-import 'package:shop_flutter_app/components/circular_progress_message.dart';
 import 'package:shop_flutter_app/components/product_item.dart';
 import 'package:shop_flutter_app/providers/product_list.dart';
 import 'package:shop_flutter_app/routes.dart';
@@ -53,9 +52,8 @@ class _ProductsManagerState extends State<ProductsManager> {
   Widget build(BuildContext context) {
     final productListProvider = Provider.of<ProductList>(context);
 
-    Widget body = Center(
-      child: CircularProgressMessage(
-          'Carregando os produtos, aguarde.', () => _loadProducts(context)),
+    Widget body = const Center(
+      child: CircularProgressIndicator(),
     );
 
     if (productListProvider.itemsCount == 0) {
