@@ -139,6 +139,11 @@ class Auth with ChangeNotifier {
     _authenticateFromBody(body);
   }
 
+  void logout() {
+    authData = null;
+    notifyListeners();
+  }
+
   void _authenticateFromBody(dynamic body) {
     DateTime now = DateTime.now();
 
