@@ -4,16 +4,17 @@ import 'package:shop_flutter_app/models/cart_item.dart';
 
 class Order {
   String id;
-  final double total;
   final List<CartItem> cartItems;
   final DateTime date;
+  final double total;
+  String userId;
 
-  Order({
-    required this.id,
-    required this.total,
-    required this.cartItems,
-    required this.date,
-  });
+  Order(
+      {required this.id,
+      required this.total,
+      required this.cartItems,
+      required this.date,
+      required this.userId});
 
   Map<String, Object> toMap() {
     final cartItemsListJson =
@@ -25,6 +26,7 @@ class Order {
       "total": total,
       "cartItems": cartItemsJson,
       "date": date.toIso8601String(),
+      "userId": userId,
     };
   }
 
@@ -46,9 +48,11 @@ class Order {
     }
 
     return Order(
-        id: orderId ?? orderData["id"],
-        total: orderData["total"] as double,
-        cartItems: cartItems,
-        date: DateTime.parse(orderData["date"]));
+      id: orderId ?? orderData["id"],
+      total: orderData["total"] as double,
+      cartItems: cartItems,
+      date: DateTime.parse(orderData["date"]),
+      userId: orderData["userId"] as String,
+    );
   }
 }

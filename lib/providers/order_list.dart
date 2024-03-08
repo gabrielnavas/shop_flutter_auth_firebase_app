@@ -10,12 +10,15 @@ import 'package:uuid/uuid.dart';
 import 'package:http/http.dart' as http;
 
 class OrderList with ChangeNotifier {
-  final String _url = "$api/orders";
+  String _url = '';
   final String _token;
+  final String _userId;
 
   List<Order> _items = [];
 
-  OrderList([this._token = '', this._items = const []]);
+  OrderList([this._token = '', this._userId = '', this._items = const []]) {
+    _url = "$api/orders/$_userId";
+  }
 
   List<Order> get items => [..._items];
 
@@ -27,6 +30,7 @@ class OrderList with ChangeNotifier {
       total: cart.totalAmout,
       cartItems: cart.items.values.toList(),
       date: DateTime.now(),
+      userId: _userId,
     );
 
     _items.insert(0, order);
@@ -86,11 +90,7 @@ class OrderList with ChangeNotifier {
 
       final dynamic body = jsonDecode(resp.body);
       if (body == null) {
-        throw HttpException(
-          message:
-              'Não foi possível carregar os pedidos. Tente novamente mais tarde.',
-          status: 400,
-        );
+        return;
       }
 
       body.forEach((orderId, orderData) {

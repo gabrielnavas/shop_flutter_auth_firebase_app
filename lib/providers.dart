@@ -29,6 +29,7 @@ class Providers {
           update: (context, auth, previousOrderList) {
             return OrderList(
               auth.authData?.token ?? '',
+              auth.authData?.userId ?? '',
               previousOrderList?.items ??
                   [], // if token is updated, get previous list
             );
