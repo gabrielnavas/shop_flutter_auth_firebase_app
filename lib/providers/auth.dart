@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -48,6 +49,7 @@ class Auth with ChangeNotifier {
       "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=$keyWeb";
 
   AuthData? authData;
+  Timer? _logoutTimer;
 
   bool isAuth() {
     if (authData == null) {
@@ -93,8 +95,8 @@ class Auth with ChangeNotifier {
         status: resp.statusCode,
       );
     }
+
     _authenticateFromBody(body);
-    notifyListeners();
   }
 
   Future<void> signup(String email, String password) async {
@@ -135,13 +137,20 @@ class Auth with ChangeNotifier {
         status: resp.statusCode,
       );
     }
-    notifyListeners();
+
     _authenticateFromBody(body);
   }
 
   void logout() {
     authData = null;
+    _logoutTimer = null;
+    _clearLogoutTimer();
     notifyListeners();
+  }
+
+  void _initAutoLogout() {
+    _clearLogoutTimer();
+    _logoutTimer = Timer(const Duration(seconds: 5), logout);
   }
 
   void _authenticateFromBody(dynamic body) {
@@ -161,5 +170,15 @@ class Auth with ChangeNotifier {
       userId: body["localId"] as String,
       expiryDate: expiryDateWithAdd,
     );
+
+    _initAutoLogout();
+    notifyListeners();
+  }
+
+  void _clearLogoutTimer() {
+    if (_logoutTimer != null) {
+      _logoutTimer!.cancel();
+      _logoutTimer = null;
+    }
   }
 }
