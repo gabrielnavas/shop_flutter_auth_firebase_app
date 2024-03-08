@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shop_flutter_app/constants/api.dart';
 import 'package:http/http.dart' as http;
+import 'package:shop_flutter_app/data/store.dart';
 import 'package:shop_flutter_app/exceptions/http_exception.dart';
 
 class ErrorMap {
@@ -33,12 +34,36 @@ class AuthData {
   final String userId;
   final DateTime expiryDate;
 
+  static const _userDataKey = 'userData';
+
   const AuthData({
     required this.email,
     required this.token,
     required this.userId,
     required this.expiryDate,
   });
+
+  static Future<bool> saveToStore(AuthData authData) {
+    return Store.saveMap(AuthData._userDataKey, {
+      "email": authData.email,
+      "token": authData.token,
+      "userId": authData.userId,
+      "expiryDate": authData.expiryDate.toIso8601String(),
+    });
+  }
+
+  static Future<AuthData?> loadFromStore() async {
+    final data = await Store.getMap(AuthData._userDataKey);
+    if (data == null) {
+      return null;
+    }
+    return AuthData(
+      email: data["email"],
+      token: data["token"],
+      userId: data["userId"],
+      expiryDate: data["expiryDate"],
+    );
+  }
 }
 
 class Auth with ChangeNotifier {
@@ -52,6 +77,9 @@ class Auth with ChangeNotifier {
   Timer? _logoutTimer;
 
   bool isAuth() {
+    AuthData.loadFromStore()
+        .then((authDataFromStore) => authData = authDataFromStore);
+
     if (authData == null) {
       return false;
     }
@@ -177,6 +205,8 @@ class Auth with ChangeNotifier {
       userId: body["localId"] as String,
       expiryDate: expiryDateWithAdd,
     );
+
+    AuthData.saveToStore(authData!);
 
     _initAutoLogout();
     notifyListeners();

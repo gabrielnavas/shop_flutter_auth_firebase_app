@@ -19,13 +19,13 @@ class Store {
     return value ?? defaultValue;
   }
 
-  static Future<Map<dynamic, dynamic>> getMap(String key,
-      [Map<dynamic, dynamic> defaultValue = const {}]) async {
-    try {
-      return jsonDecode(await getString(key));
-    } catch (_) {
-      return defaultValue;
+  static Future<Map<dynamic, dynamic>?> getMap(String key) async {
+    final prefs = await SharedPreferences.getInstance();
+    final String? value = prefs.getString(key);
+    if (value == null) {
+      return null;
     }
+    return jsonDecode(value);
   }
 
   static Future<bool> remove(String key) async {
