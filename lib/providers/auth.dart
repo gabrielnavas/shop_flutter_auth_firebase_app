@@ -149,8 +149,15 @@ class Auth with ChangeNotifier {
   }
 
   void _initAutoLogout() {
+    if (authData == null) {
+      return;
+    }
+
     _clearLogoutTimer();
-    _logoutTimer = Timer(const Duration(seconds: 5), logout);
+
+    DateTime now = DateTime.now();
+    Duration expireIn = authData!.expiryDate.difference(now);
+    _logoutTimer = Timer(Duration(seconds: expireIn.inSeconds), logout);
   }
 
   void _authenticateFromBody(dynamic body) {
