@@ -113,18 +113,28 @@ class _AuthFormState extends State<AuthForm> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30),
                         ),
+                        backgroundColor: const Color.fromARGB(142, 18, 77, 178),
                         padding: const EdgeInsets.symmetric(
                             horizontal: 30, vertical: 8),
                       ),
-                      child: _isLogin()
-                          ? const Text('ENTRAR')
-                          : const Text('REGISTRAR'),
-                    ),
+                      child: Text(
+                        _isLogin() ? 'ENTRAR' : 'REGISTRAR',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromARGB(179, 255, 255, 255),
+                        ),
+                      )),
               const Spacer(),
               TextButton(
-                  onPressed: _switchAuthMode,
-                  child: Text(
-                      _isLogin() ? 'DESEJA REGISTRAR?' : 'JÁ POSSUI CONTA?'))
+                onPressed: _switchAuthMode,
+                child: Text(
+                  _isLogin() ? 'DESEJA REGISTRAR?' : 'JÁ POSSUI CONTA?',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Color.fromARGB(201, 18, 77, 178),
+                  ),
+                ),
+              )
             ],
           ),
         ),
