@@ -37,6 +37,12 @@
 
 ## Screens
 
+### Login 
+![Login](docs/screens/login_screen.png "Login")
+
+### Register 
+![Register](docs/screens/register.png "Register")
+
 ### Product Overview
 ![Product Overview](docs/screens/products_overview.png "Product Overview")
 
