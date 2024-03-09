@@ -33,19 +33,18 @@ class ProductGridItem extends StatelessWidget {
         leading: IconButton(
           icon:
               Icon(product.isFavorite ? Icons.favorite : Icons.favorite_border),
-          onPressed: () async {
-            try {
-              await Provider.of<ProductList>(context, listen: false)
-                  .toggleFavorite(product.id);
-            } on HttpException catch (ex) {
+          onPressed: () {
+            Provider.of<ProductList>(context, listen: false)
+                .toggleFavorite(product.id)
+                .catchError((ex) {
               ScaffoldMessenger.of(context).hideCurrentSnackBar();
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text(ex.message),
+                  content: Text((ex as HttpException).message),
                   duration: const Duration(seconds: 2),
                 ),
               );
-            }
+            });
             // product.toggleFavorite();
           },
           color: Colors.redAccent,

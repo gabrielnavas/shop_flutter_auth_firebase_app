@@ -42,15 +42,16 @@ class AppDrawer extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.exit_to_app),
             title: const Text('Sair'),
-            onTap: () {
-              Provider.of<Auth>(context, listen: false).logout();
-              ScaffoldMessenger.of(context).hideCurrentSnackBar();
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Até mais! :)'),
-                  duration: Duration(seconds: 4),
-                ),
-              );
+            onTap: () async {
+              Provider.of<Auth>(context, listen: false).logout().then((_) {
+                ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Até mais! :)'),
+                    duration: Duration(seconds: 4),
+                  ),
+                );
+              });
             },
           ),
         ],
