@@ -49,7 +49,7 @@ class _AuthFormState extends State<AuthForm> {
       elevation: 8,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       child: Container(
-        height: _isSignup() ? 385 : 320,
+        height: _isSignup() ? 405 : 320,
         width: deviceSize.width * 0.75,
         padding: const EdgeInsets.symmetric(
           horizontal: 20,
