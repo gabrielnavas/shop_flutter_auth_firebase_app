@@ -3,12 +3,26 @@
 ## Before all
 - Create a firebase project.
 - Add the URI to the const String api in the lib/constants/api.dart file.
-- Change rules on project to:
+- [ WARNING ]Change rules on project to:
 ```json
 {
   "rules": {
-    ".read": "auth != null",
-    ".write": "auth != null",
+    "orders": {
+      "$uid": {
+        ".write": "$uid === auth.uid",
+        ".read": "$uid === auth.uid",
+      },
+    },
+    "userProductFavorites": {
+    	"$uid": {
+      	".write": "$uid === auth.uid",
+        ".read": "$uid === auth.uid",
+      },
+    },
+    "products": {
+        ".write": "auth != null",
+        ".read": "auth != null",
+    }
   }
 }
 ```
